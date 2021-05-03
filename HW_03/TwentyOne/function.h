@@ -3,12 +3,12 @@ using namespace std;
 
 class Guest {
 public:
-	Guest();
-	Guest(string s, int m, int ski);
-	~Guest();
-	string get_name();
-	int get_money();
-	int get_skill();
+	Guest();   // default empty
+	Guest(string s, int m, int ski);   // set private attributes
+	~Guest();   // default empty
+	string get_name();   // get private attribute: name
+	int get_money();   // get private attribute: money
+	int get_skill();   // get private attribute: skill
 	void Win(int m);
 	
 private:
