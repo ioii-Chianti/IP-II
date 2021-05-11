@@ -9,7 +9,7 @@ public:
 	string get_name();   // get private attribute: name
 	int get_money();   // get private attribute: money
 	int get_skill();   // get private attribute: skill
-	void Win(int m);
+	void Win(int m);   // 
 	
 private:
 	string name;

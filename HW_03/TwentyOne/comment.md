@@ -50,5 +50,5 @@
 *Guest *guest[1009];* 陣列裡裝著指向 Guest 物件的指標
 
 *int income;* 總收入
-*int list_num;* 黑名單人數，Queue 的 rear
+*int list_num;* 黑名單人數，Queue 的 rear~
 *string blacklist[1009];* 黑名單的名字
