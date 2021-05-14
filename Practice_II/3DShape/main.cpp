@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "function.h"
+#include "function.cpp"
 using namespace std;
 
 namespace oj {   
