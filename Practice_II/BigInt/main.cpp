@@ -1,6 +1,6 @@
 #include <cstdio>
 #include <cstring>
-#include "function.h"
+#include "function.cpp"
 using namespace oj;
 
 int main() {

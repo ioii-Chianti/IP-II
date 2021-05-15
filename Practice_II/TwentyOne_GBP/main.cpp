@@ -1,14 +1,18 @@
 #include <iostream>
 #include <cstring>
-#include "function.h"
+#include "function.cpp"
 using namespace std;
 
+#define DEBUG 0
+
 signed main() {
+	// init guard and banker
 	int guard_skill, banker_skill;
 	cin >> guard_skill >> banker_skill;
 	Human *guard = new Guard(guard_skill);
 	Human *banker = new Banker(banker_skill);
 
+	// init players
 	Human *player[1009];
 	int n;
 	cin >> n;
@@ -27,7 +31,7 @@ signed main() {
 			player[i]->Draw();
 		}
 		banker->Draw();
-	
+
 		for (int i = 1; i <= n; ++ i) {
 			if (player[i]->Kicked())
 				continue;
@@ -45,12 +49,12 @@ signed main() {
 					banker->Pay(guard);
 					guard->Kick(player[i], 1);
 				}
-			} // otherwise draw
+			}   // otherwise draw
 		}
 	}
 	
 	cout << guard->get_money() << " " << banker->get_money() << endl;
 	for (int i = 1; i <= n; ++ i)
 		cout << player[i]->name << " " << player[i]->get_money() << endl;
-	
+
 }
