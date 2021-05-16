@@ -6,21 +6,21 @@ using namespace std;
 #define DEBUG 0
 
 /* class Human */
-// - init attributes
+// 初始化成員變數
 Human::Human(string n, int m, int ski) {
     name = n;
     money = m;
     skill = ski;
     kicked = false;
-    cards = bets = 0;
+    cards = bets = -1;
 }
 int Human::get_money() { return money; }
 Human::~Human() {}
 
 /* class Guard */
-// - init Guard by reusing Human constructor
+// init Guard by reusing Human constructor
 Guard::Guard(int ski) : Human("_Guard", 0, ski) {}
-// - 守衛技能小於玩家技能，需要付費讓他離場
+// 守衛技能小於玩家技能，需要付費讓他離場
 void Guard::Pay(Human *human) {
     if (this->skill < human->skill) {
         int toPay = human->skill - this->skill;
@@ -29,7 +29,7 @@ void Guard::Pay(Human *human) {
         if (DEBUG) cout << "--- guard pay " << toPay << endl;
     }
 }
-// - 踢出玩家，flag 判斷是作弊踢出或破產踢出，破產須付費
+// 踢出玩家，flag 判斷是作弊 要不要付費
 void Guard::Kick(Human *human, int flag) {
     human->kicked = true;
     if (flag) this->Pay(human);
@@ -44,6 +44,7 @@ void Banker::Pay(Human *human) {
         human->money += 100;
         this->money -= 100;
         if (DEBUG) cout << "--- call guard, guard money: " << human->money << endl;
+        if (DEBUG) cout << "--- banker now: " << this->money << endl;
     } else {   // 付錢給玩家
         int bonus = human->skill < this->skill ? 10 * human->cards : 0;
         int toPay = human->bets + bonus;
@@ -51,16 +52,16 @@ void Banker::Pay(Human *human) {
             toPay *= 2;
         this->money -= toPay;
         human->money += toPay;
-        if (DEBUG) cout << "--- banker pay player " << human->name << toPay << endl;
+        if (DEBUG) cout << "--- banker pay player " << human->name << " " << toPay << endl;
     }
 }
 int Banker::Win(Human *human) {
     if (this->cards > 21 && human->cards > 21)
-        return -1;   // 無視發生
+        return -1;   // 沒事發生
     if (this->cards <= 21 && (human->cards > 21 || human->cards <= this->cards))
         return 1;    // 莊家贏
     if (human->cards <= 21 && (this->cards > 21 || human->cards > this->cards))
-        return 0;    // 玩家營
+        return 0;    // 玩家贏
 }
 void Banker::Draw() {
     int cards = 0, input;
@@ -70,7 +71,7 @@ void Banker::Draw() {
         if (ch == '\n') break;
     }
     this->cards = cards;
-    if (DEBUG) cout << "--- banker cards points " << this->cards << endl;
+    if (DEBUG) cout << "--- banker points " << this->cards << endl;
 }
 Banker::~Banker() {}
 
@@ -81,11 +82,14 @@ void Player::Pay(Human *human) {
     if (this->money > this->bets) {
         human->money += this->bets;
         this->money -= this->bets;
-        if (DEBUG) cout << "--- player pay, cur: " << this->money << endl;
-    } else {
-        human->money += this->money;
+        if (DEBUG) cout << "--- player pay: " << this->bets << " now has: " << this->money << endl;
+        if (DEBUG) cout << "--- who gets: " << human->name << " and has: " << human->money << endl;
+    } else {   // money <= bet
+        int toPay = this->money;
         this->money = 0;
-        if (DEBUG) cout << "--- player pay, cur: " << this->money << endl;
+        human->money += toPay;
+        if (DEBUG) cout << "--- player pay: " << toPay << " now has: " << this->money << endl;
+        if (DEBUG) cout << "--- who gets: " << human->name << " and has: " << human->money << endl;
     }
 }
 void Player::Bet() {
@@ -94,7 +98,6 @@ void Player::Bet() {
     int bets;
     cin >> bets;
     this->bets = bets;
-    if (DEBUG) cout << "--- init bet " << this->bets << endl;
 }
 void Player::Draw() {
     int cards = 0, input;
@@ -106,7 +109,9 @@ void Player::Draw() {
     this->cards = cards;
     if (DEBUG) cout << "--- player cards points " << this->cards << endl;
 }
-bool Player::Kicked() { if (DEBUG) cout << "*** kicked? " << kicked << endl; return kicked; }
+bool Player::Kicked() { if (DEBUG) cout << "*** alreadly kicked? " << kicked << endl;
+    return kicked;
+}
 bool Player::Bankrupt() { if (DEBUG) cout << "--- bankrupt? " << (this->money <= 0) << endl; return this->money <= 0; }
 bool Player::Cheat(Human *human) {
     int bonus = this->skill < human->skill ? 10 * this->cards : 0;
