@@ -1,5 +1,5 @@
 #include <iostream>
-#include "function.h"
+#include "function_ta.cpp"
 
 std::ostream& operator<<(std::ostream& os, Codec& data)
 {

@@ -13,7 +13,7 @@ class BigInt {
         BigInt operator++(int);
         BigInt& operator--();
         BigInt operator--(int);
-        char* to_s();
+        char* to_s();  // OK
 };
 
 }   // end namespace oj

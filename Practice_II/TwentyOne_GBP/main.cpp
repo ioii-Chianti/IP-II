@@ -3,8 +3,6 @@
 #include "function.cpp"
 using namespace std;
 
-#define DEBUG 0
-
 signed main() {
 	// init guard and banker
 	int guard_skill, banker_skill;
