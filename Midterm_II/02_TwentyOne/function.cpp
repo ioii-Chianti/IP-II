@@ -135,7 +135,7 @@ void Casino::TwentyOne() {
                 break;
             }
         }
-        if (flag) {
+        if (flag)
             for (int j = 0; j < this->player_num; j++) {
                 if (this->player[j]->name == str) {
                     joined[j] = 1;
@@ -143,7 +143,6 @@ void Casino::TwentyOne() {
                     this->player[j]->cards = new_player->cards;
                 }
             }
-        }
         delete new_player;
     }
     this->banker->Draw();
