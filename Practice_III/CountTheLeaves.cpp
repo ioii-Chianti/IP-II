@@ -5,19 +5,18 @@ using namespace std;
 int main() {
     int T, parent, child;
     while (true) {
-        set<int> Set;
+        set<int> leaves;
         cin >> T;
         if (T) {
             while (T--) {
                 cin >> parent >> child;
-                if (Set.find(parent) != Set.end())
-                    Set.erase(parent);
-                Set.insert(child);
+                if (leaves.find(parent) != leaves.end())
+                    leaves.erase(parent);   // parent node won't be a leaf node XD
+                leaves.insert(child);
             }
-            cin >> T;
-            cout << Set.size() << endl;
+            cin >> T;   // root is useless info.
+            cout << leaves.size() << endl;
         } else
             return 0;
     }
-    return 0;
 }
