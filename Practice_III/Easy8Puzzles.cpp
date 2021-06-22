@@ -4,7 +4,8 @@
 #define DEBUG 1
 using namespace std;
 
-int correctBoard[9] = {1, 2, 3, 4, 5, 6, 7, 8, 0};
+int const correctBoard[9] = {1, 2, 3, 4, 5, 6, 7, 8, 0};
+int ans = 15;
 
 struct State {
     int board[9], index, steps;
@@ -17,7 +18,6 @@ struct State {
     }
     State() {};
     void print() {
-        cout << "- Board: ";
         for (int i = 0; i < 9; i++)
             cout << this->board[i] << ' ';
         cout << endl;
@@ -42,30 +42,32 @@ int main() {
         queue<State> bfs;
         set<State> visited;
         bfs.push(State(board));
+        visited.insert(State(board));
 
         while (!bfs.empty()) {
             State cur_state = bfs.front(), next_state;
             bfs.pop();
 
-            if (DEBUG) { cout << "- Root "; cur_state.print(); }
+            if (cur_state.correct()) {
+                bfs.push(cur_state);
+                if (DEBUG) cout << "- found in " << cur_state.steps << endl;
+                break;
+            }
+
+            if (DEBUG) { cout << "- "; cur_state.print(); }
 
             int row = cur_state.index / 3;
             int col = cur_state.index % 3;
 
             cur_state.steps++;
-            // if (cur_state.steps > 14) break;
 
             if (row != 0) {
                 next_state = cur_state;
                 int toMove = next_state.board[next_state.index - 3];
+                if (DEBUG) { cout << "- to move "<< toMove << endl; }
                 next_state.board[next_state.index] = toMove;
                 next_state.board[next_state.index - 3] = 0;
                 next_state.index -= 3;
-                if (next_state.correct()) {
-                    bfs.push(next_state);
-                    if (DEBUG) { cout << "- Correct "; next_state.print(); }
-                    break;
-                }
                 if (visited.find(next_state) == visited.end()) {
                     visited.insert(next_state);
                     bfs.push(next_state);
@@ -79,11 +81,6 @@ int main() {
                 next_state.board[next_state.index] = toMove;
                 next_state.board[next_state.index + 3] = 0;
                 next_state.index += 3;
-                if (next_state.correct()) {
-                    bfs.push(next_state);
-                    if (DEBUG) { cout << "- Correct "; next_state.print(); }
-                    break;
-                }
                 if (visited.find(next_state) == visited.end()) {
                     visited.insert(next_state);
                     bfs.push(next_state);
@@ -97,11 +94,6 @@ int main() {
                 next_state.board[next_state.index] = toMove;
                 next_state.board[next_state.index - 1] = 0;
                 next_state.index--;
-                if (next_state.correct()) {
-                    bfs.push(next_state);
-                    if (DEBUG) { cout << "- Correct "; next_state.print(); }
-                    break;
-                }
                 if (visited.find(next_state) == visited.end()) {
                     visited.insert(next_state);
                     bfs.push(next_state);
@@ -115,11 +107,6 @@ int main() {
                 next_state.board[next_state.index] = toMove;
                 next_state.board[next_state.index + 1] = 0;
                 next_state.index++;
-                if (next_state.correct()) {
-                    bfs.push(next_state);
-                    if (DEBUG) { cout << "- Correct "; next_state.print(); }
-                    break;
-                }
                 if (visited.find(next_state) == visited.end()) {
                     visited.insert(next_state);
                     bfs.push(next_state);
